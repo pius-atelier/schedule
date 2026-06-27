@@ -2,37 +2,209 @@
 <html lang="ja">
   <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ピウスアトリエ 予約確認ページ</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        padding: 20px;
+        min-height: 100vh;
+      }
+      .container {
+        max-width: 800px;
+        margin: 0 auto;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        padding: 40px;
+      }
+      h2 {
+        color: #2c3e50;
+        text-align: center;
+        margin-bottom: 30px;
+        font-size: 28px;
+      }
+      h3 {
+        color: #e74c3c;
+        margin-top: 25px;
+        margin-bottom: 15px;
+        font-size: 18px;
+        border-left: 4px solid #e74c3c;
+        padding-left: 12px;
+      }
+      .notice-section {
+        background: #fff3cd;
+        border-left: 4px solid #ffc107;
+        padding: 15px;
+        margin-bottom: 20px;
+        border-radius: 4px;
+        line-height: 1.8;
+      }
+      .notice-section br:last-child {
+        display: none;
+      }
+      .form-section {
+        background: #f8f9fa;
+        padding: 15px;
+        margin-bottom: 20px;
+        border-radius: 4px;
+        line-height: 1.8;
+      }
+      .schedule-table {
+        width: 100%;
+        margin-top: 20px;
+        border-collapse: collapse;
+      }
+      .schedule-table th {
+        background: #34495e;
+        color: white;
+        padding: 12px;
+        text-align: left;
+        font-weight: 600;
+      }
+      .schedule-table td {
+        padding: 12px;
+        border-bottom: 1px solid #ecf0f1;
+      }
+      .schedule-table tr:hover {
+        background: #f8f9fa;
+      }
+      .available {
+        color: #27ae60;
+        font-weight: 600;
+      }
+      .unavailable {
+        color: #e74c3c;
+        font-weight: 600;
+      }
+      .select-btn {
+        background: #3498db;
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-weight: 600;
+        transition: background 0.3s;
+      }
+      .select-btn:hover {
+        background: #2980b9;
+      }
+      .select-btn:disabled {
+        background: #bdc3c7;
+        cursor: not-allowed;
+      }
+      .copy-instruction {
+        background: #ecf0f1;
+        padding: 15px;
+        border-radius: 4px;
+        margin: 20px 0;
+        line-height: 1.8;
+      }
+      .copy-text {
+        background: #fff;
+        padding: 10px;
+        border-left: 3px solid #3498db;
+        font-family: monospace;
+        margin-top: 10px;
+        padding: 10px;
+      }
+      @media (max-width: 600px) {
+        .container {
+          padding: 20px;
+        }
+        h2 {
+          font-size: 22px;
+        }
+        .schedule-table {
+          font-size: 14px;
+        }
+        .schedule-table td, .schedule-table th {
+          padding: 8px;
+        }
+      }
+    </style>
   </head>
   <body>
-    <h2>ピウスアトリエ 予約確認ページ</h2>
-    <h3>★お知らせ</h3>
-    ・平日と土曜日は10時、13時に予約可能です<br>
-    ・平日は16時半に子供（小中高校生）のみ予約可能です<br>
-    ・土曜日は個別、子供不可のご希望は予約いただけません<br>
-    ・日曜日、講師の都合がつかない日は予約いただけません<br>
-    <br>
-    <h3>★受講者の予約属性を選択してください</h3>
-    □子供（小中高校生）　□大人男性　□大人女性<br>
-    □未就学児の子連れ（大人の受講時の場合）<br>
-    計□名の同時予約<br>
-    <br>
-    <h3>★希望する予約属性があれば選択してください</h3>
-    □他の子供と受講したくない（+2000円）<br>
-    □他の大人男性と受講したくない（+1000円）<br>
-    □他の大人女性と受講したくない（+1000円）<br>
-    「個別レッスン（全選択）」<br>
-    <br>
+    <div class="container">
+      <h2>🎨 ピウスアトリエ 予約確認ページ</h2>
+      
+      <h3>★お知らせ</h3>
+      <div class="notice-section">
+        ・平日と土曜日は10時、13時に予約可能です<br>
+        ・平日は16時半に子供（小中高校生）のみ予約可能です<br>
+        ・土曜日は個別、子供不可のご希望は予約いただけません<br>
+        ・日曜日、講師の都合がつかない日は予約いただけません
+      </div>
+      
+      <h3>★受講者の予約属性を選択してください</h3>
+      <div class="form-section">
+        ☑ 子供（小中高校生）　☐ 大人男性　☐ 大人女性<br>
+        ☐ 未就学児の子連れ（大人の受講時の場合）<br>
+        計 <strong>□</strong>名の同時予約
+      </div>
+      
+      <h3>★希望する予約属性があれば選択してください</h3>
+      <div class="form-section">
+        ☐ 他の子供と受講したくない（+2000円）<br>
+        ☐ 他の大人男性と受講したくない（+1000円）<br>
+        ☐ 他の大人女性と受講したくない（+1000円）<br>
+        📋 「個別レッスン（全選択）」
+      </div>
+      
     <h3>★ご予約の際は以下をコピペしてLINEやメールからご相談ください</h3>
-    「〇月〇日（★）★時から、〇〇の１名で、〇〇で、予約希望です。」<br>
-    <br>
+    <div class="copy-instruction">
+      <p>「〇月〇日（★）★時から、〇〇の１名で、〇〇で、予約希望です。」</p>
+    </div>
+
     <h3>★以下の中から日程を選択してください</h3>
-    <table>
-    </table>
-    6月27日（土）10時〜　　　ご相談可能（選択）<br>
-    6月27日（土）13時〜　　　不可<br>
-    6月29日（月）10時〜　　　ご相談可能（選択）<br>
-    6月29日（月）13時〜　　　ご相談可能（選択）<br>
-    6月29日（月）16時半〜　　ご相談可能（選択）<br>
+      <table class="schedule-table">
+        <thead>
+          <tr>
+            <th>日程</th>
+            <th>時間</th>
+            <th>状態</th>
+            <th>アクション</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>6月27日（土）</td>
+            <td>10時〜</td>
+            <td><span class="available">ご相談可能</span></td>
+            <td><button class="select-btn">選択</button></td>
+          </tr>
+          <tr>
+            <td>6月27日（土）</td>
+            <td>13時〜</td>
+            <td><span class="unavailable">不可</span></td>
+            <td><button class="select-btn" disabled>選択</button></td>
+          </tr>
+          <tr>
+            <td>6月29日（月）</td>
+            <td>10時〜</td>
+            <td><span class="available">ご相談可能</span></td>
+            <td><button class="select-btn">選択</button></td>
+          </tr>
+          <tr>
+            <td>6月29日（月）</td>
+            <td>13時〜</td>
+            <td><span class="available">ご相談可能</span></td>
+            <td><button class="select-btn">選択</button></td>
+          </tr>
+          <tr>
+            <td>6月29日（月）</td>
+            <td>16時半〜</td>
+            <td><span class="available">ご相談可能</span></td>
+            <td><button class="select-btn">選択</button></td>
+          </tr>
+        </tbody>
+      </table>
   </body>
 </html>
