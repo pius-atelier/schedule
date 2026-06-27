@@ -75,16 +75,8 @@
       .schedule-table tr:hover {
         background: #f8f9fa;
       }
-      .available {
-        color: #27ae60;
-        font-weight: 600;
-      }
-      .unavailable {
-        color: #e74c3c;
-        font-weight: 600;
-      }
       .select-btn {
-        background: #3498db;
+        background: #27ae60;
         color: white;
         border: none;
         padding: 8px 16px;
@@ -94,10 +86,10 @@
         transition: background 0.3s;
       }
       .select-btn:hover {
-        background: #2980b9;
+        background: #277e60;
       }
       .select-btn:disabled {
-        background: #bdc3c7;
+        background: #e74c3c;
         cursor: not-allowed;
       }
       .copy-instruction {
@@ -165,38 +157,26 @@
 
     <h3>以下の中から日程を選択してください</h3>
       <table class="schedule-table">
-        <thead>
-          <tr>
-            <th>日程</th>
-            <th>状態</th>
-            <th>アクション</th>
-          </tr>
-        </thead>
         <tbody>
           <tr>
             <td>6月27日（土）10時〜</td>
-            <td><span class="available">ご相談可能</span></td>
-            <td><button class="select-btn">選択</button></td>
+            <td><button class="select-btn">ご相談可能</button></td>
           </tr>
           <tr>
             <td>6月27日（土）13時〜</td>
-            <td><span class="unavailable">不可</span></td>
-            <td><button class="select-btn" disabled>選択</button></td>
+            <td><button class="select-btn" disabled>不可</button></td>
           </tr>
           <tr>
             <td>6月29日（月）10時〜</td>
-            <td><span class="available">ご相談可能</span></td>
-            <td><button class="select-btn">選択</button></td>
+            <td><button class="select-btn">ご相談可能</button></td>
           </tr>
           <tr>
             <td>6月29日（月）13時〜</td>
-            <td><span class="available">ご相談可能</span></td>
-            <td><button class="select-btn">選択</button></td>
+            <td><button class="select-btn">ご相談可能</button></td>
           </tr>
           <tr>
             <td>6月29日（月）16時半〜</td>
-            <td><span class="available">ご相談可能</span></td>
-            <td><button class="select-btn">選択</button></td>
+            <td><button class="select-btn">ご相談可能</button></td>
           </tr>
         </tbody>
       </table>
