@@ -106,6 +106,26 @@
       .select-btn.disabled-booked {
         background: #d74c3c;
       }
+      .month-nav-container {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 15px;
+        flex-wrap: wrap;
+      }
+      .month-nav-btn {
+        background: #34495e;
+        color: white;
+        border: none;
+        padding: 8px 20px;
+        border-radius: 20px;
+        cursor: pointer;
+        font-weight: 600;
+        font-size: 14px;
+        transition: background 0.3s;
+      }
+      .month-nav-btn:hover {
+        background: #2c3e50;
+      }
       @media (max-width: 600px) {
         .container {
           padding: 20px;
@@ -176,12 +196,23 @@
             if (month !== lastMonth) {
               const monthRow = document.createElement("tr");
               monthRow.className = "month-header";
+              monthRow.id = `month-${month}`;
               const monthCell = document.createElement("td");
               monthCell.className = "month-title-cell";
               monthCell.colSpan = isViewMode ? 3 : 2; 
               monthCell.textContent = `${month}月`;
               monthRow.appendChild(monthCell);
               tableBody.appendChild(monthRow);
+              const navBtn = document.createElement("button");
+              navBtn.className = "month-nav-btn";
+              navBtn.textContent = `${month}月`;
+              navBtn.addEventListener("click", () => {
+                const targetRow = document.getElementById(`month-${month}`);
+                if (targetRow) {
+                  targetRow.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+              });
+              navContainer.appendChild(navBtn);
               lastMonth = month;
             }
           
@@ -483,6 +514,7 @@
     </div>
 
     <h3>以下の中から日程を選択してください</h3>
+    <div id="month-nav" class="month-nav-container"></div>
     <table class="schedule-table">
       <tbody id="schedule-table">
          <tr><td>読み込み中です…</td></tr>
