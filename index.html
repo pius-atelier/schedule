@@ -273,7 +273,41 @@ function abc(fetchedEvents) {
 }
 function generateCopyText() {
     const numEl = document.getElementById("num");
+    const numVal = numEl ? parseInt(numEl.value, 10) : 1;
     const numText = numEl ? numEl.value + "名" : "〇名";
+    const nameArray = [];
+    for (let i = 0; i < numVal; i++) {
+        nameArray.push(String.fromCharCode(65 + i) + "さん");
+    }
+    let calendarText = nameArray.join(",");
+    const calendarProfiles = [];
+    if (document.getElementById("child")?.checked) calendarProfiles.push("子供さん");
+    if (document.getElementById("woman_wc")?.checked) {
+        calendarProfiles.push("女性さん");
+        calendarProfiles.push("子連れ");
+    } else if (document.getElementById("woman")?.checked) {
+        calendarProfiles.push("女性さん");
+    }
+    if (document.getElementById("man_wc")?.checked) {
+        calendarProfiles.push("男性さん");
+        calendarProfiles.push("子連れ");
+    } else if (document.getElementById("man")?.checked) {
+        calendarProfiles.push("男性さん");
+    }
+    const nc = document.getElementById("no_child")?.checked;
+    const nw = document.getElementById("no_woman")?.checked;
+    const nm = document.getElementById("no_man")?.checked;
+    if (nc && nw && nm) {
+        calendarProfiles.push("個別レッスン");
+    } else {
+        if (nc) calendarProfiles.push("子供不可");
+        if (nw) calendarProfiles.push("女性不可");
+        if (nm) calendarProfiles.push("男性不可");
+    }
+    if (calendarProfiles.length > 0) {
+        calendarText += "_" + calendarProfiles.join("・");
+    }
+
     const profiles = [];
     if (document.getElementById("child")?.checked) profiles.push("子供");
     if (document.getElementById("woman")?.checked) profiles.push("大人女性");
@@ -293,8 +327,7 @@ function generateCopyText() {
         if (nm) options.push("他の大人男性不可");
     }
     const optionText = options.length > 0 ? `、${options.join("・")}で` : "";
-    const resultText = `${selectedDateTime}から${profileText}が${numText}で${optionText}予約希望です。[`;
-    resultText += "]";
+    const resultText = `${selectedDateTime}から${profileText}が${numText}で${optionText}予約希望です。[${calendarText}]";
     const targetBox = document.getElementById("copy-target-box");
     if (targetBox) {
         targetBox.textContent = resultText;
