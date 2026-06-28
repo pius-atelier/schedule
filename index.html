@@ -143,6 +143,7 @@
                     document.getElementById('test').innerText = err.message;
                 });
         });
+
 document.addEventListener("DOMContentLoaded", function() {
   const tableBody = document.getElementById("schedule-table");
   const dayLabels = ["日", "月", "火", "水", "木", "金", "土"];
@@ -155,8 +156,6 @@ document.addEventListener("DOMContentLoaded", function() {
     const date = currentDate.getDate();
     const dayOfWeek = currentDate.getDay();
     const dayName = dayLabels[dayOfWeek];
-
-    // 日曜日（0）は予約不可のためスキップする場合
     if (dayOfWeek === 0) continue;
     let timeSlots = [];
     if (dayOfWeek >= 1 && dayOfWeek <= 5) {
@@ -169,8 +168,10 @@ document.addEventListener("DOMContentLoaded", function() {
       const dateCell = document.createElement("td");
       dateCell.textContent = `${month}月${date}日（${dayName}）${time}`;
       const statusCell = document.createElement("td");
-// またはdisabledを付けて不可と書く
+
+      // またはdisabledを付けて不可と書く
       statusCell.innerHTML = "<button class='select-btn'>ご相談可能</button>";
+
       row.appendChild(dateCell);
       row.appendChild(statusCell);
       tableBody.appendChild(row);
