@@ -205,11 +205,6 @@ function abc(fetchedEvents) {
         if (summary.includes("c")) existingNoChild = true;
         if (summary.includes("w")) existingNoWoman = true;
         if (summary.includes("m")) existingNoMan = true;
-        if (summary.includes("p")) {
-          existingNoChild = true;
-          existingNoWoman = true;
-          existingNoMan = true;
-        }
 
         const names = summary.split(/[，,]/);
         let eventCount = names.length;
@@ -296,13 +291,9 @@ function generateCopyText() {
     const nc = document.getElementById("no_child")?.checked;
     const nw = document.getElementById("no_woman")?.checked;
     const nm = document.getElementById("no_man")?.checked;
-    if (nc && nw && nm) {
-        calendarProfiles.push("p");
-    } else {
-        if (nc) calendarProfiles.push("c");
-        if (nw) calendarProfiles.push("w");
-        if (nm) calendarProfiles.push("m");
-    }
+    if (nc) calendarProfiles.push("c");
+    if (nw) calendarProfiles.push("w");
+    if (nm) calendarProfiles.push("m");
     if (calendarProfiles.length > 0) {
         calendarText += calendarProfiles.join("");
     }
