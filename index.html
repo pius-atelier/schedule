@@ -146,53 +146,33 @@
 document.addEventListener("DOMContentLoaded", function() {
   const tableBody = document.getElementById("schedule-table");
   const dayLabels = ["日", "月", "火", "水", "木", "金", "土"];
-  
-  // 今日から何日分表示するか（2ヶ月＝約60日）
-  const daysToCount = 60; 
-  
+  const daysToCount = 60;
   const today = new Date();
-
   for (let i = 0; i < daysToCount; i++) {
-    // ループごとに1日ずつ進める
     const currentDate = new Date(today);
     currentDate.setDate(today.getDate() + i);
-
     const month = currentDate.getMonth() + 1;
     const date = currentDate.getDate();
-    const dayOfWeek = currentDate.getDay(); // 0:日, 1:月 ... 6:土
+    const dayOfWeek = currentDate.getDay();
     const dayName = dayLabels[dayOfWeek];
 
     // 日曜日（0）は予約不可のためスキップする場合
     if (dayOfWeek === 0) continue;
-
-    // 曜日に応じた時間枠の設定
     let timeSlots = [];
-    
     if (dayOfWeek >= 1 && dayOfWeek <= 5) {
-      // 平日（月〜金）：10時、13時、16時半
       timeSlots = ["10時〜", "13時〜", "16時半〜"];
     } else if (dayOfWeek === 6) {
-      // 土曜日：10時、13時
       timeSlots = ["10時〜", "13時〜"];
     }
-
-    // 各時間枠を行としてテーブルに追加
     timeSlots.forEach(time => {
       const row = document.createElement("tr");
-
-      // 日時セルの作成 (例: 6月29日（月）10時〜)
       const dateCell = document.createElement("td");
       dateCell.textContent = `${month}月${date}日（${dayName}）${time}`;
-      
-      // ステータスセルの作成 (初期値はすべて「ご相談可能」にする例)
       const statusCell = document.createElement("td");
-      statusCell.textContent = "ご相談可能";
-
-      // 行にセルを追加
+// またはdisabledを付けて不可と書く
+      statusCell.innerHTML = "<button class='select-btn'>ご相談可能</button>";
       row.appendChild(dateCell);
       row.appendChild(statusCell);
-      
-      // テーブルの本体に行を追加
       tableBody.appendChild(row);
     });
   }
