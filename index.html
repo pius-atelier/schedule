@@ -216,12 +216,10 @@ function generateCopyText() {
 function copyToClipboard() {
     const text = document.getElementById("copy-target-box").textContent;
     navigator.clipboard.writeText(text).then(() => {
-        const btn = document.querySelector(".copy-btn");
+        const btn = document.getElementById("copy-btn");
         btn.textContent = "コピーしました！";
-        btn.style.background = "#27ae60";
         setTimeout(() => {
             btn.textContent = "クリップボードにコピー";
-            btn.style.background = "#3498db";
         }, 2000);
     });
 }
@@ -332,7 +330,7 @@ function no_everybody() {
     <h3 id="copy-base">ご予約の際は以下をコピーしてLINEやメールからご相談ください</h3>
     <div class="copy-instruction">
       <div id="copy-target-box">処理中...</div>
-      <button class="copy-btn" onclick="copyToClipboard()">クリップボードにコピー</button>
+      <button class="select-btn" id="copy-btn" onclick="copyToClipboard()">クリップボードにコピー</button>
     </div>
 
     <h3>以下の中から日程を選択してください</h3>
