@@ -244,13 +244,13 @@
               }
               const matchedEvents = fetchedEvents.filter(event => {
                 if (!event.start || !event.start.dateTime || !event.end || !event.end.dateTime) return false;
-        
                 const eventStart = new Date(event.start.dateTime);
                 const eventEnd = new Date(event.end.dateTime);
                 return slotDate >= eventStart && slotDate < eventEnd;
               });
         
               let isDisabled = matchedEvents.some(event => (event.summary || "").trim() === "不可");
+              if (dayOfWeek === 6 && myNoChild) isDisabled = true;
               
               let totalPeople = 0;
               let existingChild = false;
