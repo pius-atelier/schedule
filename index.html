@@ -99,14 +99,6 @@
         margin: 20px 0;
         line-height: 1.8;
       }
-      .copy-text {
-        background: #fff;
-        padding: 10px;
-        border-left: 3px solid #3498db;
-        font-family: monospace;
-        margin-top: 10px;
-        padding: 10px;
-      }
       @media (max-width: 600px) {
         .container {
           padding: 20px;
@@ -183,7 +175,7 @@ function abc() {
       btn.addEventListener("click", () => {
           selectedDateTime = dateText;
           generateCopyText();
-           document.getElementById("copy-instruction").scrollIntoView({ behavior: 'smooth' });
+           document.getElementById("copy-base").scrollIntoView({ behavior: 'smooth' });
       });
       statusCell.appendChild(btn);
 
@@ -337,9 +329,9 @@ function no_everybody() {
         <button class="select-btn" onclick="no_everybody()">個別レッスン(全選択)</button>
       </div>
       
-    <h3>ご予約の際は以下をコピーしてLINEやメールからご相談ください</h3>
+    <h3 id="copy-base">ご予約の際は以下をコピーしてLINEやメールからご相談ください</h3>
     <div class="copy-instruction">
-      <div class="copy-text" id="copy-target-box">処理中...</div>
+      <div id="copy-target-box">処理中...</div>
       <button class="copy-btn" onclick="copyToClipboard()">クリップボードにコピー</button>
     </div>
 
