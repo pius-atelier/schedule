@@ -137,6 +137,7 @@
 function abc() {
   const tableBody = document.getElementById("schedule-table");
   tableBody.innerHTML = "";
+  const isViewMode = new URLSearchParams(window.location.search).has('view');
   const dayLabels = ["日", "月", "火", "水", "木", "金", "土"];
   const daysToCount = 60;
   const today = new Date();
@@ -174,6 +175,33 @@ function abc() {
 
       row.appendChild(dateCell);
       row.appendChild(statusCell);
+
+      if (isViewMode) {
+        const infoCell = document.createElement("td");
+        const currentYear = currentDate.getFullYear();
+        const matchedEvents = fetchedEvents.filter(event => {
+          if (!event.start || !event.start.dateTime) return false;
+          const eventDate = new Date(event.start.dateTime);
+          const mMatch = (eventDate.getMonth() + 1) === month;
+          const dMatch = eventDate.getDate() === date;
+          let tMatch = false;
+          const hour = eventDate.getHours();
+          const min = eventDate.getMinutes();
+          if (time === "10時" && hour === 10) tMatch = true;
+          if (time === "13時" && hour === 13) tMatch = true;
+          if (time === "16時半" && hour === 16 && min === 30) tMatch = true;
+          
+          return mMatch && dMatch && tMatch;
+        });
+
+        if (matchedEvents.length > 0) {
+          infoCell.textContent = matchedEvents.map(e => e.summary || "予定あり").join(", ");
+        } else {
+          infoCell.textContent = "なし";
+        }
+        row.appendChild(infoCell);
+      }
+
       tableBody.appendChild(row);
     });
   }
