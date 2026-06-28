@@ -170,6 +170,8 @@
       function update() {
         const tableBody = document.getElementById("schedule-table");
         tableBody.innerHTML = "";
+        const navContainer = document.getElementById("month-nav");
+        navContainer.innerHTML = "";
         const isViewMode = new URLSearchParams(window.location.search).has('view');
         const dayLabels = ["日", "月", "火", "水", "木", "金", "土"];
         const daysToCount = 60;
