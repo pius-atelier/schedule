@@ -229,7 +229,9 @@ function setCookieEventListeners() {
 function no_everybody() {
     document.getElementById("no_child").checked = true;
     document.getElementById("no_woman").checked = true;
-    document.getElementById("no_man").checked = true;
+    document.getElementById("no_man").checked = true; saveFormState(document.getElementById("no_child"));
+saveFormState(document.getElementById("no_woman"));
+saveFormState(document.getElementById("no_man"));
 }
     </script>
   </head>
