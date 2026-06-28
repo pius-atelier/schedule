@@ -159,20 +159,19 @@ function abc(fetchedEvents) {
       dateCell.textContent = dateText + "〜";
       const statusCell = document.createElement("td");
 
-
       const matchedEvents = fetchedEvents.filter(event => {
-        if (!event.start || !event.start.dateTime) return false;
-        const eventDate = new Date(event.start.dateTime);
-        const mMatch = (eventDate.getMonth() + 1) === month;
-        const dMatch = eventDate.getDate() === date;
-        let tMatch = false;
-        const hour = eventDate.getHours();
-        const min = eventDate.getMinutes();
-        if (time === "10時" && hour === 10) tMatch = true;
-        if (time === "13時" && hour === 13) tMatch = true;
-        if (time === "16時半" && hour === 16 && min === 30) tMatch = true;
-        
-        return mMatch && dMatch && tMatch;
+        if (!event.start || !event.start.dateTime || !event.end || !event.end.dateTime) return false;
+        const eventStart = new Date(event.start.dateTime);
+        const eventEnd = new Date(event.end.dateTime);
+        const slotDate = new Date(currentDate);
+        if (time === "10時") {
+          slotDate.setHours(10, 0, 0, 0);
+        } else if (time === "13時") {
+          slotDate.setHours(13, 0, 0, 0);
+        } else if (time === "16時半") {
+          slotDate.setHours(16, 30, 0, 0);
+        }
+        return slotDate >= eventStart && slotDate < eventEnd;
       });
       const isSewingDisabled = matchedEvents.some(event => (event.summary || "").trim() === "ミシン（不可）");
 
