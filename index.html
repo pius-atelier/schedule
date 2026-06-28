@@ -200,7 +200,7 @@ function abc(fetchedEvents) {
       if (isViewMode) {
         const infoCell = document.createElement("td");
         if (matchedEvents.length > 0) {
-          infoCell.textContent = matchedEvents.map(e => e.summary || "予定あり").join(",");
+          infoCell.textContent = matchedEvents.map(e => e.summary || "予定あり").join(", ");
         } else {
           infoCell.textContent = "なし";
         }
