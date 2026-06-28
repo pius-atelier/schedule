@@ -110,7 +110,6 @@
     <script>
         const API_KEY = 'AIzaSyCIIjhZmt3PCXe5ILuRFPrN6_iJbMxXWpg'; 
         const CALENDAR_ID = 'c666aaabda48f04b4ff767e6af9be1da56a31f715931aa39973632bba5b6a408@group.calendar.google.com'; 
-        let fetchedEvents = [];
         const targetIds = ['num', 'child', 'woman', 'man', 'woman_wc', 'man_wc', 'no_child', 'no_woman', 'no_man'];
         let selectedDateTime = "〇月〇日(★) ★時";
         window.addEventListener('DOMContentLoaded', () => {
@@ -125,16 +124,14 @@
                     return response.json();
                 })
                 .then(data => {
-                    fetchedEvents = data.items || [];
-                    abc();
-                    document.getElementById('test').innerText = JSON.stringify(fetchedEvents, null, 2);
+                    abc(data.items || []);
                 })
                 .catch(err => {
-                    document.getElementById('test').innerText = err.message;
+                    document.getElementById('schedule-table').innerText = err.message;
                 });
         });
 
-function abc() {
+function abc(fetchedEvents) {
   const tableBody = document.getElementById("schedule-table");
   tableBody.innerHTML = "";
   const isViewMode = new URLSearchParams(window.location.search).has('view');
@@ -360,7 +357,5 @@ function no_everybody() {
            <tr><td>読み込み中です…</td></tr>
         </tbody>
       </table>
-
-      <div id="test"></div>
   </body>
 </html>
