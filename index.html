@@ -1,4 +1,4 @@
-<!DOCTYOE html>
+<!DOCTYPE html>
 <html lang="ja">
   <head>
     <meta charset="UTF-8">
@@ -172,7 +172,7 @@ function abc(fetchedEvents) {
         if (!event.start || !event.start.dateTime || !event.end || !event.end.dateTime) return false;
         const eventStart = new Date(event.start.dateTime);
         const eventEnd = new Date(event.end.dateTime);
-        return slotDate >= eventStart && slotDate <= eventEnd;
+        return slotDate >= eventStart && slotDate < eventEnd;
       });
 
       const isSewingDisabled = matchedEvents.some(event => (event.summary || "").trim() === "ミシン（不可）");
