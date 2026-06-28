@@ -200,12 +200,12 @@ function abc(fetchedEvents) {
         const summary = (event.summary || "").trim();
         if (!summary || summary === "予定あり" || summary === "予約不可") return;
 
-        if (summary.includes("子供さん")) existingChild = true;
+        if (summary.includes("子供さん") || summary.includes("子連れ")) existingChild = true;
         if (summary.includes("女性さん")) existingWoman = true;
         if (summary.includes("男性さん")) existingMan = true;
-        if (summary.includes("他の子供不可") || summary.includes("子供不可")) existingNoChild = true;
-        if (summary.includes("他の女性不可") || summary.includes("女性不可")) existingNoWoman = true;
-        if (summary.includes("他の男性不可") || summary.includes("男性不可")) existingNoMan = true;
+        if (summary.includes("子供不可")) existingNoChild = true;
+        if (summary.includes("女性不可")) existingNoWoman = true;
+        if (summary.includes("男性不可")) existingNoMan = true;
         if (summary.includes("個別レッスン")) {
           existingNoChild = true;
           existingNoWoman = true;
@@ -227,7 +227,6 @@ function abc(fetchedEvents) {
         if (myNoMan && existingMan) isDisabled = true;
         if ((totalPeople + myNum) > 5) isDisabled = true;
       }
-
 
       const btn = document.createElement("button");
       btn.className = "select-btn";
