@@ -126,7 +126,7 @@
         const API_KEY = 'AIzaSyCIIjhZmt3PCXe5ILuRFPrN6_iJbMxXWpg'; 
         const CALENDAR_ID = 'c666aaabda48f04b4ff767e6af9be1da56a31f715931aa39973632bba5b6a408@group.calendar.google.com'; 
         let fetchedEvents = [];
-        const targetIds = ['num', 'child', 'woman', 'man', 'w_child', 'no_child', 'no_woman', 'no_man'];
+        const targetIds = ['num', 'child', 'woman', 'man', 'woman_wc', 'man_wc', 'no_child', 'no_woman', 'no_man'];
         window.addEventListener('DOMContentLoaded', () => {
             loadFormState();
             setCookieEventListeners();
@@ -265,9 +265,11 @@ saveFormState(document.getElementById("no_man"));
         <br>
         <input type="checkbox" id="woman" name="woman" /><label for="woman"> 大人女性</label>
         <br>
+       <input type="checkbox" id="woman_wc" name="woman_wc" /><label for="woman_wc"> 大人女性(未就学児の子連れ)</label>
+        <br>
         <input type="checkbox" id="man" name="man" /><label for="man"> 大人男性</label>
         <br>
-        <input type="checkbox" id="w_child" name="w_child" /><label for="w_child"> 未就学児の子連れで大人が受講</label>
+        <input type="checkbox" id="man_wc" name="man_wc" /><label for="man_wc"> 大人男性(未就学児の子連れ)</label>
       </div>
       
       <h3>ご希望があれば選択ください</h3>
