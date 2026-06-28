@@ -186,7 +186,7 @@ function abc(fetchedEvents) {
         btn.textContent = "不可";
         btn.disabled = true;
       } else {
-        btn.textContent = "ご相談可能";
+        btn.textContent = (isViewMode)?:"ご相談可能";
         btn.addEventListener("click", () => {
             selectedDateTime = dateText;
             generateCopyText();
@@ -200,7 +200,7 @@ function abc(fetchedEvents) {
       if (isViewMode) {
         const infoCell = document.createElement("td");
         if (matchedEvents.length > 0) {
-          infoCell.textContent = matchedEvents.map(e => e.summary || "予定あり").join(", ");
+          infoCell.textContent = matchedEvents.map(e => e.summary || "予定あり").join(",");
         } else {
           infoCell.textContent = "なし";
         }
