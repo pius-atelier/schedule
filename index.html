@@ -199,8 +199,8 @@ function generateCopyText() {
         if (nw) options.push("他の大人女性不可");
         if (nm) options.push("他の大人男性不可");
     }
-    const optionText = options.length > 0 ? `${options.join("・")}で` : "";
-    const resultText = `${selectedDateTime}から${profileText}で${numText}が${optionText}予約希望です。`;
+    const optionText = options.length > 0 ? `、${options.join("・")}で` : "";
+    const resultText = `${selectedDateTime}から${profileText}が${numText}で${optionText}予約希望です。`;
     const targetBox = document.getElementById("copy-target-box");
     if (targetBox) {
         targetBox.textContent = resultText;
