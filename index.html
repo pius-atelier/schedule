@@ -186,7 +186,19 @@ function abc(fetchedEvents) {
         btn.textContent = "不可";
         btn.disabled = true;
       } else {
-        btn.textContent = (isViewMode)?"？人":"ご相談可能";
+        if (isViewMode) {
+          let totalPeople = 0;
+          matchedEvents.forEach(event => {
+            const summary = (event.summary || "").trim();
+            if (summary && summary !== "予定あり") {
+              const names = summary.split(/[，,]/);
+              totalPeople += names.length;
+            }
+          });
+          btn.textContent = `${totalPeople}人`;
+        } else {
+          btn.textContent = "ご相談可能";
+        }
         btn.addEventListener("click", () => {
             selectedDateTime = dateText;
             generateCopyText();
