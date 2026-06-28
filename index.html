@@ -75,6 +75,17 @@
       .schedule-table tr:hover {
         background: #f8f9fa;
       }
+      .schedule-table tr.month-header:hover {
+        background: none;
+      }
+      .month-title-cell {
+        background: #eaf2f8;
+        color: #2c3e50;
+        font-weight: bold;
+        font-size: 16px;
+        padding: 10px 12px !important;
+        border-bottom: 2px solid #bdc3c7 !important;
+      }
       .select-btn {
         background: #27ae60;
         color: white;
@@ -151,6 +162,7 @@
         const myNoChild = document.getElementById("no_child")?.checked;
         const myNoWoman = document.getElementById("no_woman")?.checked;
         const myNoMan = document.getElementById("no_man")?.checked;
+        let lastMonth = null;
       
         for (let i = 0; i < daysToCount; i++) {
             const currentDate = new Date();
@@ -160,6 +172,19 @@
             const dayOfWeek = currentDate.getDay();
             const dayName = dayLabels[dayOfWeek];
             if (dayOfWeek === 0) continue;
+
+            if (month !== lastMonth) {
+              const monthRow = document.createElement("tr");
+              monthRow.className = "month-header";
+              const monthCell = document.createElement("td");
+              monthCell.className = "month-title-cell";
+              monthCell.colSpan = isViewMode ? 3 : 2; 
+              monthCell.textContent = `${month}月`;
+              monthRow.appendChild(monthCell);
+              tableBody.appendChild(monthRow);
+              lastMonth = month;
+            }
+          
             let timeSlots = [];
             if (dayOfWeek >= 1 && dayOfWeek <= 5) {
               timeSlots = ["10時", "13時", "16時半"];
