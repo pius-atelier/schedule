@@ -179,7 +179,7 @@ function abc(fetchedEvents) {
         return slotDate >= eventStart && slotDate < eventEnd;
       });
 
-      const isSewingDisabled = matchedEvents.some(event => (event.summary || "").trim() === "ミシン（不可）");
+      const isSewingDisabled = matchedEvents.some(event => (event.summary || "").trim() === "ミシン（予約不可）");
 
       const btn = document.createElement("button");
       btn.className = "select-btn";
