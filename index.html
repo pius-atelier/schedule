@@ -205,16 +205,18 @@
               monthCell.textContent = `${month}月`;
               monthRow.appendChild(monthCell);
               tableBody.appendChild(monthRow);
-              const navBtn = document.createElement("button");
-              navBtn.className = "month-nav-btn";
-              navBtn.textContent = `${month}月`;
-              navBtn.addEventListener("click", () => {
-                const targetRow = document.getElementById(`month-${month}`);
-                if (targetRow) {
-                  targetRow.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }
-              });
-              navContainer.appendChild(navBtn);
+              if (lastMonth !== null) {
+                const navBtn = document.createElement("button");
+                navBtn.className = "month-nav-btn";
+                navBtn.textContent = `${month}月`;
+                navBtn.addEventListener("click", () => {
+                  const targetRow = document.getElementById(`month-${month}`);
+                  if (targetRow) {
+                    targetRow.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                  }
+                });
+                navContainer.appendChild(navBtn);
+              }
               lastMonth = month;
             }
           
