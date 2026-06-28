@@ -108,283 +108,285 @@
       }
     </style>
     <script>
-        const API_KEY = 'AIzaSyCIIjhZmt3PCXe5ILuRFPrN6_iJbMxXWpg'; 
-        const CALENDAR_ID = 'c666aaabda48f04b4ff767e6af9be1da56a31f715931aa39973632bba5b6a408@group.calendar.google.com'; 
-        const targetIds = ['num', 'child', 'woman', 'man', 'woman_wc', 'man_wc', 'no_child', 'no_woman', 'no_man'];
-        let selectedDateTime = "〇月〇日(★) ★時";
-        window.addEventListener('DOMContentLoaded', () => {
-            loadFormState();
-            setCookieEventListeners();
-            generateCopyText();
-            const now = new Date().toISOString();
-            const url = `https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(CALENDAR_ID)}/events?key=${API_KEY}&timeMin=${now}&orderBy=startTime&singleEvents=true&maxResults=2500`;
-            fetch(url)
-                .then(response => {
-                    if (!response.ok) throw new Error('カレンダーデータの取得に失敗しました。設定を確認してください。');
-                    return response.json();
-                })
-                .then(data => {
-                    abc(data.items || []);
-                })
-                .catch(err => {
-                    document.getElementById('schedule-table').innerText = err.message;
-                });
-        });
-
-function abc(fetchedEvents) {
-  const tableBody = document.getElementById("schedule-table");
-  tableBody.innerHTML = "";
-  const isViewMode = new URLSearchParams(window.location.search).has('view');
-  const dayLabels = ["日", "月", "火", "水", "木", "金", "土"];
-  const daysToCount = 60;
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-  const myNum = parseInt(document.getElementById("num")?.value || "1", 10);
-  const myChild = document.getElementById("child")?.checked;
-  const myWoman = document.getElementById("woman")?.checked || document.getElementById("woman_wc")?.checked;
-  const myMan = document.getElementById("man")?.checked || document.getElementById("man_wc")?.checked;
-  const myNoChild = document.getElementById("no_child")?.checked;
-  const myNoWoman = document.getElementById("no_woman")?.checked;
-  const myNoMan = document.getElementById("no_man")?.checked;
-
-
-  for (let i = 0; i < daysToCount; i++) {
-    const currentDate = new Date();
-    currentDate.setDate(currentDate.getDate() + i);
-    const month = currentDate.getMonth() + 1;
-    const date = currentDate.getDate();
-    const dayOfWeek = currentDate.getDay();
-    const dayName = dayLabels[dayOfWeek];
-    if (dayOfWeek === 0) continue;
-    let timeSlots = [];
-    if (dayOfWeek >= 1 && dayOfWeek <= 5) {
-      timeSlots = ["10時", "13時", "16時半"];
-    } else if (dayOfWeek === 6) {
-      timeSlots = ["10時", "13時"];
-    }
-    timeSlots.forEach(time => {
-      const row = document.createElement("tr");
-      const dateCell = document.createElement("td");
-      const dateText = `${month}月${date}日(${dayName}) ${time}`;
-      dateCell.textContent = dateText + "〜";
-      const statusCell = document.createElement("td");
-
-      const slotDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate());
-      if (time === "10時") {
-        slotDate.setHours(10, 0, 0, 0);
-      } else if (time === "13時") {
-        slotDate.setHours(13, 0, 0, 0);
-      } else if (time === "16時半") {
-        slotDate.setHours(16, 30, 0, 0);
-      }
-      const matchedEvents = fetchedEvents.filter(event => {
-        if (!event.start || !event.start.dateTime || !event.end || !event.end.dateTime) return false;
-
-        const eventStart = new Date(event.start.dateTime);
-        const eventEnd = new Date(event.end.dateTime);
-        return slotDate >= eventStart && slotDate < eventEnd;
+      const API_KEY = 'AIzaSyCIIjhZmt3PCXe5ILuRFPrN6_iJbMxXWpg'; 
+      const CALENDAR_ID = 'c666aaabda48f04b4ff767e6af9be1da56a31f715931aa39973632bba5b6a408@group.calendar.google.com'; 
+      const targetIds = ['num', 'child', 'woman', 'man', 'woman_wc', 'man_wc', 'no_child', 'no_woman', 'no_man'];
+      let selectedDateTime = "〇月〇日(★) ★時";
+      let fetchedEvents;
+      window.addEventListener('DOMContentLoaded', () => {
+        loadFormState();
+        setCookieEventListeners();
+        generateCopyText();
+        const now = new Date().toISOString();
+        const url = `https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(CALENDAR_ID)}/events?key=${API_KEY}&timeMin=${now}&orderBy=startTime&singleEvents=true&maxResults=2500`;
+        fetch(url)
+            .then(response => {
+                if (!response.ok) throw new Error('カレンダーデータの取得に失敗しました。設定を確認してください。');
+                return response.json();
+            })
+            .then(data => {
+                fetchedEvents = data.items || [];
+                update();
+            })
+            .catch(err => {
+                document.getElementById('schedule-table').innerText = err.message;
+            });
       });
 
-      let isDisabled = matchedEvents.some(event => (event.summary || "").trim() === "予約不可");
+      function update() {
+        const tableBody = document.getElementById("schedule-table");
+        tableBody.innerHTML = "";
+        const isViewMode = new URLSearchParams(window.location.search).has('view');
+        const dayLabels = ["日", "月", "火", "水", "木", "金", "土"];
+        const daysToCount = 60;
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        const myNum = parseInt(document.getElementById("num")?.value || "1", 10);
+        const myChild = document.getElementById("child")?.checked;
+        const myWoman = document.getElementById("woman")?.checked || document.getElementById("woman_wc")?.checked;
+        const myMan = document.getElementById("man")?.checked || document.getElementById("man_wc")?.checked;
+        const myNoChild = document.getElementById("no_child")?.checked;
+        const myNoWoman = document.getElementById("no_woman")?.checked;
+        const myNoMan = document.getElementById("no_man")?.checked;
       
-      let totalPeople = 0;
-      let existingChild = false;
-      let existingWoman = false;
-      let existingMan = false;
-      let existingNoChild = false;
-      let existingNoWoman = false;
-      let existingNoMan = false;
-
-      matchedEvents.forEach(event => {
-        const summary = (event.summary || "").trim();
-        if (!summary || summary === "予定あり" || summary === "予約不可") return;
-
-        if (summary.includes("C") || summary.includes("B")) existingChild = true;
-        if (summary.includes("W")) existingWoman = true;
-        if (summary.includes("M")) existingMan = true;
-        if (summary.includes("c")) existingNoChild = true;
-        if (summary.includes("w")) existingNoWoman = true;
-        if (summary.includes("m")) existingNoMan = true;
-
-        const names = summary.split(/[，,]/);
-        let eventCount = names.length;
-        totalPeople += eventCount;
-      });
-
-      if (!isDisabled && matchedEvents.length > 0) {
-        if (existingNoChild && myChild) isDisabled = true;
-        if (existingNoWoman && myWoman) isDisabled = true;
-        if (existingNoMan && myMan) isDisabled = true;
-
-        if (myNoChild && existingChild) isDisabled = true;
-        if (myNoWoman && existingWoman) isDisabled = true;
-        if (myNoMan && existingMan) isDisabled = true;
-        if ((totalPeople + myNum) > 5) isDisabled = true;
-      }
-
-      const btn = document.createElement("button");
-      btn.className = "select-btn";
-      if (isDisabled) {
-        btn.textContent = "不可";
-        btn.disabled = true;
-      } else {
-        if (isViewMode) {
-          let totalPeople = 0;
-          matchedEvents.forEach(event => {
-            const summary = (event.summary || "").trim();
-            if (summary && summary !== "予定あり") {
-              const names = summary.split(/[，,]/);
-              totalPeople += names.length;
+        for (let i = 0; i < daysToCount; i++) {
+            const currentDate = new Date();
+            currentDate.setDate(currentDate.getDate() + i);
+            const month = currentDate.getMonth() + 1;
+            const date = currentDate.getDate();
+            const dayOfWeek = currentDate.getDay();
+            const dayName = dayLabels[dayOfWeek];
+            if (dayOfWeek === 0) continue;
+            let timeSlots = [];
+            if (dayOfWeek >= 1 && dayOfWeek <= 5) {
+              timeSlots = ["10時", "13時", "16時半"];
+            } else if (dayOfWeek === 6) {
+              timeSlots = ["10時", "13時"];
             }
+            timeSlots.forEach(time => {
+              const row = document.createElement("tr");
+              const dateCell = document.createElement("td");
+              const dateText = `${month}月${date}日(${dayName}) ${time}`;
+              dateCell.textContent = dateText + "〜";
+              const statusCell = document.createElement("td");
+        
+              const slotDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate());
+              if (time === "10時") {
+                slotDate.setHours(10, 0, 0, 0);
+              } else if (time === "13時") {
+                slotDate.setHours(13, 0, 0, 0);
+              } else if (time === "16時半") {
+                slotDate.setHours(16, 30, 0, 0);
+              }
+              const matchedEvents = fetchedEvents.filter(event => {
+                if (!event.start || !event.start.dateTime || !event.end || !event.end.dateTime) return false;
+        
+                const eventStart = new Date(event.start.dateTime);
+                const eventEnd = new Date(event.end.dateTime);
+                return slotDate >= eventStart && slotDate < eventEnd;
+              });
+        
+              let isDisabled = matchedEvents.some(event => (event.summary || "").trim() === "予約不可");
+              
+              let totalPeople = 0;
+              let existingChild = false;
+              let existingWoman = false;
+              let existingMan = false;
+              let existingNoChild = false;
+              let existingNoWoman = false;
+              let existingNoMan = false;
+        
+              matchedEvents.forEach(event => {
+                const summary = (event.summary || "").trim();
+                if (!summary || summary === "予定あり" || summary === "予約不可") return;
+        
+                if (summary.includes("C") || summary.includes("B")) existingChild = true;
+                if (summary.includes("W")) existingWoman = true;
+                if (summary.includes("M")) existingMan = true;
+                if (summary.includes("c")) existingNoChild = true;
+                if (summary.includes("w")) existingNoWoman = true;
+                if (summary.includes("m")) existingNoMan = true;
+        
+                const names = summary.split(/[，,]/);
+                let eventCount = names.length;
+                totalPeople += eventCount;
+              });
+        
+              if (!isDisabled && matchedEvents.length > 0) {
+                if (existingNoChild && myChild) isDisabled = true;
+                if (existingNoWoman && myWoman) isDisabled = true;
+                if (existingNoMan && myMan) isDisabled = true;
+                if (myNoChild && existingChild) isDisabled = true;
+                if (myNoWoman && existingWoman) isDisabled = true;
+                if (myNoMan && existingMan) isDisabled = true;
+                if ((totalPeople + myNum) > 5) isDisabled = true;
+              }
+        
+              const btn = document.createElement("button");
+              btn.className = "select-btn";
+              if (isDisabled) {
+                btn.textContent = "不可";
+                btn.disabled = true;
+              } else {
+                if (isViewMode) {
+                  let totalPeople = 0;
+                  matchedEvents.forEach(event => {
+                    const summary = (event.summary || "").trim();
+                    if (summary && summary !== "予定あり") {
+                      const names = summary.split(/[，,]/);
+                      totalPeople += names.length;
+                    }
+                  });
+                  btn.textContent = `${totalPeople}人`;
+                } else {
+                  btn.textContent = "ご相談可能";
+                }
+                btn.addEventListener("click", () => {
+                    selectedDateTime = dateText;
+                    generateCopyText();
+                     document.getElementById("copy-base").scrollIntoView({ behavior: 'smooth' });
+                });
+              }
+              statusCell.appendChild(btn);
+              row.appendChild(dateCell);
+              row.appendChild(statusCell);
+        
+              if (isViewMode) {
+                const infoCell = document.createElement("td");
+                if (matchedEvents.length > 0) {
+                  infoCell.textContent = matchedEvents.map(e => e.summary || "予定あり").join(",");
+                } else {
+                  infoCell.textContent = "なし";
+                }
+                row.appendChild(infoCell);
+              }
+        
+              tableBody.appendChild(row);
+            });
+          }
+      }
+      function generateCopyText() {
+          const numEl = document.getElementById("num");
+          const numVal = numEl ? parseInt(numEl.value, 10) : 1;
+          const numText = numEl ? numEl.value + "名" : "〇名";
+          const nameArray = [];
+          for (let i = 0; i < numVal; i++) {
+              nameArray.push(String.fromCharCode(65 + i) + "さん");
+          }
+          let calendarText = nameArray.join(",");
+          const calendarProfiles = [];
+          if (document.getElementById("child")?.checked) calendarProfiles.push("C");
+          if (document.getElementById("woman_wc")?.checked) {
+              calendarProfiles.push("W");
+              calendarProfiles.push("B");
+          } else if (document.getElementById("woman")?.checked) {
+              calendarProfiles.push("W");
+          }
+          if (document.getElementById("man_wc")?.checked) {
+              calendarProfiles.push("M");
+              calendarProfiles.push("B");
+          } else if (document.getElementById("man")?.checked) {
+              calendarProfiles.push("M");
+          }
+          const nc = document.getElementById("no_child")?.checked;
+          const nw = document.getElementById("no_woman")?.checked;
+          const nm = document.getElementById("no_man")?.checked;
+          if (nc) calendarProfiles.push("c");
+          if (nw) calendarProfiles.push("w");
+          if (nm) calendarProfiles.push("m");
+          if (calendarProfiles.length > 0) {
+              calendarText += calendarProfiles.join("");
+          }
+        
+          const profiles = [];
+          if (document.getElementById("child")?.checked) profiles.push("子供");
+          if (document.getElementById("woman")?.checked) profiles.push("大人女性");
+          if (document.getElementById("woman_wc")?.checked) profiles.push("大人女性(子連れ)");
+          if (document.getElementById("man")?.checked) profiles.push("大人男性");
+          if (document.getElementById("man_wc")?.checked) profiles.push("大人男性(子連れ)");
+          const profileText = profiles.length > 0 ? profiles.join("・") : "〇〇";
+          
+          const options = [];
+          if (nc && nw && nm) {
+              options.push("個別レッスン");
+          } else {
+              if (nc) options.push("他の子供不可");
+              if (nw) options.push("他の大人女性不可");
+              if (nm) options.push("他の大人男性不可");
+          }
+          const optionText = options.length > 0 ? `、${options.join("・")}で` : "";
+          const resultText = `${selectedDateTime}から${profileText}が${numText}で${optionText}予約希望です。[${calendarText}]`;
+          const targetBox = document.getElementById("copy-target-box");
+          if (targetBox) {
+              targetBox.textContent = resultText;
+          }
+      }
+      function copyToClipboard() {
+          const text = document.getElementById("copy-target-box").textContent;
+          navigator.clipboard.writeText(text).then(() => {
+              const btn = document.getElementById("copy-btn");
+              btn.textContent = "コピーしました！";
+              setTimeout(() => {
+                  btn.textContent = "クリップボードにコピー";
+              }, 3000);
           });
-          btn.textContent = `${totalPeople}人`;
-        } else {
-          btn.textContent = "ご相談可能";
-        }
-        btn.addEventListener("click", () => {
-            selectedDateTime = dateText;
-            generateCopyText();
-             document.getElementById("copy-base").scrollIntoView({ behavior: 'smooth' });
-        });
       }
-      statusCell.appendChild(btn);
-      row.appendChild(dateCell);
-      row.appendChild(statusCell);
-
-      if (isViewMode) {
-        const infoCell = document.createElement("td");
-        if (matchedEvents.length > 0) {
-          infoCell.textContent = matchedEvents.map(e => e.summary || "予定あり").join(",");
-        } else {
-          infoCell.textContent = "なし";
-        }
-        row.appendChild(infoCell);
+      function getCookie(name) {
+          const cookies = document.cookie.split(';');
+          for (let i = 0; i < cookies.length; i++) {
+              const cookie = cookies[i].trim();
+              if (cookie.startsWith(name + '=')) {
+                  return cookie.substring(name.length + 1);
+              }
+          }
+          return null;
       }
-
-      tableBody.appendChild(row);
-    });
-  }
-}
-function generateCopyText() {
-    const numEl = document.getElementById("num");
-    const numVal = numEl ? parseInt(numEl.value, 10) : 1;
-    const numText = numEl ? numEl.value + "名" : "〇名";
-    const nameArray = [];
-    for (let i = 0; i < numVal; i++) {
-        nameArray.push(String.fromCharCode(65 + i) + "さん");
-    }
-    let calendarText = nameArray.join(",");
-    const calendarProfiles = [];
-    if (document.getElementById("child")?.checked) calendarProfiles.push("C");
-    if (document.getElementById("woman_wc")?.checked) {
-        calendarProfiles.push("W");
-        calendarProfiles.push("B");
-    } else if (document.getElementById("woman")?.checked) {
-        calendarProfiles.push("W");
-    }
-    if (document.getElementById("man_wc")?.checked) {
-        calendarProfiles.push("M");
-        calendarProfiles.push("B");
-    } else if (document.getElementById("man")?.checked) {
-        calendarProfiles.push("M");
-    }
-    const nc = document.getElementById("no_child")?.checked;
-    const nw = document.getElementById("no_woman")?.checked;
-    const nm = document.getElementById("no_man")?.checked;
-    if (nc) calendarProfiles.push("c");
-    if (nw) calendarProfiles.push("w");
-    if (nm) calendarProfiles.push("m");
-    if (calendarProfiles.length > 0) {
-        calendarText += calendarProfiles.join("");
-    }
-
-    const profiles = [];
-    if (document.getElementById("child")?.checked) profiles.push("子供");
-    if (document.getElementById("woman")?.checked) profiles.push("大人女性");
-    if (document.getElementById("woman_wc")?.checked) profiles.push("大人女性(子連れ)");
-    if (document.getElementById("man")?.checked) profiles.push("大人男性");
-    if (document.getElementById("man_wc")?.checked) profiles.push("大人男性(子連れ)");
-    const profileText = profiles.length > 0 ? profiles.join("・") : "〇〇";
-    
-    const options = [];
-    if (nc && nw && nm) {
-        options.push("個別レッスン");
-    } else {
-        if (nc) options.push("他の子供不可");
-        if (nw) options.push("他の大人女性不可");
-        if (nm) options.push("他の大人男性不可");
-    }
-    const optionText = options.length > 0 ? `、${options.join("・")}で` : "";
-    const resultText = `${selectedDateTime}から${profileText}が${numText}で${optionText}予約希望です。[${calendarText}]`;
-    const targetBox = document.getElementById("copy-target-box");
-    if (targetBox) {
-        targetBox.textContent = resultText;
-    }
-}
-function copyToClipboard() {
-    const text = document.getElementById("copy-target-box").textContent;
-    navigator.clipboard.writeText(text).then(() => {
-        const btn = document.getElementById("copy-btn");
-        btn.textContent = "コピーしました！";
-        setTimeout(() => {
-            btn.textContent = "クリップボードにコピー";
-        }, 3000);
-    });
-}
-function getCookie(name) {
-    const cookies = document.cookie.split(';');
-    for (let i = 0; i < cookies.length; i++) {
-        const cookie = cookies[i].trim();
-        if (cookie.startsWith(name + '=')) {
-            return cookie.substring(name.length + 1);
-        }
-    }
-    return null;
-}
-function setCookie(name, value) {
-    const maxAge = 60 * 60 * 24 * 30 * 3;
-    document.cookie = `${name}=${value}; max-age=${maxAge}; path=/; SameSite=Lax`;
-}
-function saveFormState(el) {
-    if (el.type === 'checkbox') {
-        setCookie(el.id, el.checked ? 'true' : 'false');
-    } else if (el.tagName === 'SELECT') {
-        setCookie(el.id, el.value);
-    }
-    generateCopyText();
-}
-function loadFormState() {
-    targetIds.forEach(id => {
-        const el = document.getElementById(id);
-        if (!el) return;
-        const savedValue = getCookie(id);
-        if (savedValue !== null) {
-            if (el.type === 'checkbox') {
-                el.checked = (savedValue === 'true');
-            } else if (el.tagName === 'SELECT') {
-                el.value = savedValue;
-            }
-        }
-    });
-}
-function setCookieEventListeners() {
-    targetIds.forEach(id => {
-        const el = document.getElementById(id);
-        if (!el) return;
-        el.addEventListener('change', () => {
-            saveFormState(el);
-        });
-    });
-}
-function no_everybody() {
-    document.getElementById("no_child").checked = true;
-    document.getElementById("no_woman").checked = true;
-    document.getElementById("no_man").checked = true;
-    saveFormState(document.getElementById("no_child"));
-    saveFormState(document.getElementById("no_woman"));
-    saveFormState(document.getElementById("no_man"));
-    generateCopyText();
-}
+      function setCookie(name, value) {
+          const maxAge = 60 * 60 * 24 * 30 * 3;
+          document.cookie = `${name}=${value}; max-age=${maxAge}; path=/; SameSite=Lax`;
+      }
+      function saveFormState(el) {
+          if (el.type === 'checkbox') {
+              setCookie(el.id, el.checked ? 'true' : 'false');
+          } else if (el.tagName === 'SELECT') {
+              setCookie(el.id, el.value);
+          }
+      }
+      function loadFormState() {
+          targetIds.forEach(id => {
+              const el = document.getElementById(id);
+              if (!el) return;
+              const savedValue = getCookie(id);
+              if (savedValue !== null) {
+                  if (el.type === 'checkbox') {
+                      el.checked = (savedValue === 'true');
+                  } else if (el.tagName === 'SELECT') {
+                      el.value = savedValue;
+                  }
+              }
+          });
+      }
+      function setCookieEventListeners() {
+          targetIds.forEach(id => {
+              const el = document.getElementById(id);
+              if (!el) return;
+              el.addEventListener('change', () => {
+                  saveFormState(el);
+                  update();
+                  generateCopyText();
+              });
+          });
+      }
+      function no_everybody() {
+          document.getElementById("no_child").checked = true;
+          document.getElementById("no_woman").checked = true;
+          document.getElementById("no_man").checked = true;
+          saveFormState(document.getElementById("no_child"));
+          saveFormState(document.getElementById("no_woman"));
+          saveFormState(document.getElementById("no_man"));
+          update();
+          generateCopyText();
+      }
     </script>
   </head>
   <body>
