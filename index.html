@@ -127,9 +127,11 @@
         const CALENDAR_ID = 'c666aaabda48f04b4ff767e6af9be1da56a31f715931aa39973632bba5b6a408@group.calendar.google.com'; 
         let fetchedEvents = [];
         const targetIds = ['num', 'child', 'woman', 'man', 'woman_wc', 'man_wc', 'no_child', 'no_woman', 'no_man'];
+        let selectedDateTime = "〇月〇日（★）★時";
         window.addEventListener('DOMContentLoaded', () => {
             loadFormState();
             setCookieEventListeners();
+            generateCopyText();
             const now = new Date().toISOString();
             const url = `https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(CALENDAR_ID)}/events?key=${API_KEY}&timeMin=${now}&orderBy=startTime&singleEvents=true`;
             fetch(url)
@@ -174,13 +176,61 @@ function abc() {
       const statusCell = document.createElement("td");
 
       // またはdisabledを付けて不可と書く
-      statusCell.innerHTML = "<button class='select-btn'>ご相談可能</button>";
+      const btn = document.createElement("button");
+      btn.className = "select-btn";
+      btn.textContent = "ご相談可能";
+      btn.addEventListener("click", () => {
+          selectedDateTime = dateText;
+          generateCopyText();
+           document.getElementById("copy-target-box").scrollIntoView({ behavior: 'smooth' });
+      });
+      statusCell.appendChild(btn);
 
       row.appendChild(dateCell);
       row.appendChild(statusCell);
       tableBody.appendChild(row);
     });
   }
+}
+function generateCopyText() {
+    const numEl = document.getElementById("num");
+    const numText = numEl ? numEl.value + "名" : "〇名";
+    const profiles = [];
+    if (document.getElementById("child")?.checked) profiles.push("子供");
+    if (document.getElementById("woman")?.checked) profiles.push("大人女性");
+    if (document.getElementById("woman_wc")?.checked) profiles.push("大人女性(子連れ)");
+    if (document.getElementById("man")?.checked) profiles.push("大人男性");
+    if (document.getElementById("man_wc")?.checked) profiles.push("大人男性(子連れ)");
+    const profileText = profiles.length > 0 ? profiles.join("・") : "〇〇";
+    const options = [];
+    const nc = document.getElementById("no_child")?.checked;
+    const nw = document.getElementById("no_woman")?.checked;
+    const nm = document.getElementById("no_man")?.checked;
+    if (nc && nw && nm) {
+        options.push("個別レッスン希望");
+    } else {
+        if (nc) options.push("他の子供不可");
+        if (nw) options.push("他の大人女性不可");
+        if (nm) options.push("他の大人男性不可");
+    }
+    const optionText = options.length > 0 ? `（希望: ${options.join("・")}）` : "";
+    const resultText = `${selectedDateTime}から、${profileText}の${numText}で、${optionText || "追加希望なし"}で、予約希望です。`;
+    const targetBox = document.getElementById("copy-target-box");
+    if (targetBox) {
+        targetBox.textContent = resultText;
+    }
+}
+function copyToClipboard() {
+    const text = document.getElementById("copy-target-box").textContent;
+    navigator.clipboard.writeText(text).then(() => {
+        const btn = document.querySelector(".copy-btn");
+        btn.textContent = "コピーしました！";
+        btn.style.background = "#27ae60";
+        setTimeout(() => {
+            btn.textContent = "クリップボードにコピー";
+            btn.style.background = "#3498db";
+        }, 2000);
+    });
 }
 function getCookie(name) {
     const cookies = document.cookie.split(';');
@@ -202,6 +252,7 @@ function saveFormState(el) {
     } else if (el.tagName === 'SELECT') {
         setCookie(el.id, el.value);
     }
+    generateCopyText();
 }
 function loadFormState() {
     targetIds.forEach(id => {
@@ -229,9 +280,10 @@ function setCookieEventListeners() {
 function no_everybody() {
     document.getElementById("no_child").checked = true;
     document.getElementById("no_woman").checked = true;
-    document.getElementById("no_man").checked = true; saveFormState(document.getElementById("no_child"));
-saveFormState(document.getElementById("no_woman"));
-saveFormState(document.getElementById("no_man"));
+    document.getElementById("no_man").checked = true;     saveFormState(document.getElementById("no_child"));
+    saveFormState(document.getElementById("no_woman"));
+    saveFormState(document.getElementById("no_man"));
+    generateCopyText();
 }
     </script>
   </head>
