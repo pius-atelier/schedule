@@ -447,6 +447,10 @@
               if (!el) return;
               el.addEventListener('change', () => {
                   saveFormState(el);
+                  if (selectedDateTime.length > 0) {
+                      selectedDateTime = [];
+                      alert("情報を変更したため日程を削除しました");
+                  }
                   update();
                   generateCopyText();
               });
@@ -459,6 +463,10 @@
           saveFormState(document.getElementById("no_child"));
           saveFormState(document.getElementById("no_woman"));
           saveFormState(document.getElementById("no_man"));
+          if (selectedDateTime.length > 0) {
+              selectedDateTime = [];
+              alert("情報を変更したため日程を削除しました");
+          }
           update();
           generateCopyText();
       }
