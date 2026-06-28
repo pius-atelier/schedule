@@ -89,8 +89,11 @@
         background: #277e60;
       }
       .select-btn:disabled {
-        background: #d74c3c;
+        background: #7f8c8d;
         cursor: not-allowed;
+      }
+      .select-btn.disabled-booked {
+        background: #d74c3c;
       }
       @media (max-width: 600px) {
         .container {
@@ -111,7 +114,7 @@
       const API_KEY = 'AIzaSyCIIjhZmt3PCXe5ILuRFPrN6_iJbMxXWpg'; 
       const CALENDAR_ID = 'c666aaabda48f04b4ff767e6af9be1da56a31f715931aa39973632bba5b6a408@group.calendar.google.com'; 
       const targetIds = ['num', 'child', 'woman', 'man', 'woman_wc', 'man_wc', 'no_child', 'no_woman', 'no_man'];
-      let selectedDateTime = "〇月〇日(★) ★時";
+      let selectedDateTime = [];
       let fetchedEvents;
       window.addEventListener('DOMContentLoaded', () => {
         loadFormState();
@@ -226,9 +229,13 @@
               btn.className = "select-btn";
               if (isDisabled) {
                 btn.textContent = "不可";
+                btn.classList.add("disabled-booked");
                 btn.disabled = true;
               } else {
-                if (isViewMode) {
+                if (selectedDateTime.includes(dateText)) {
+                  btn.textContent = "選択中";
+                  btn.disabled = true;
+                } else if (isViewMode) {
                   let totalPeople = 0;
                   matchedEvents.forEach(event => {
                     const summary = (event.summary || "").trim();
@@ -242,7 +249,10 @@
                   btn.textContent = "ご相談可能";
                 }
                 btn.addEventListener("click", () => {
-                    selectedDateTime = dateText;
+                    if (!selectedDateTime.includes(dateText)) {
+                      selectedDateTime.push(dateText);
+                    }
+                    update();
                     generateCopyText();
                     document.getElementById("copy-base").scrollIntoView({ behavior: 'smooth' });
                 });
@@ -315,11 +325,12 @@
               if (nm) options.push("他の大人男性不可");
           }
           const optionText = options.length > 0 ? `、${options.join("・")}で` : "";
+          const dateTimeText = selectedDateTime.length > 0 ? selectedDateTime.join("<br>") : "〇月〇日(★) ★時";
           const resultHTML = `${selectedDateTime}<br>${profileText}が${numText}で${optionText}予約希望です。<br>[${calendarText}]`;
           document.getElementById("copy-target-box").innerHTML = resultHTML;
       }
       function copyToClipboard() {
-          const text = document.getElementById("copy-target-box").innerHTML.replaceAll('<br>', '\r\n');
+          const text = document.getElementById("copy-target-box").innerHTML.replace(/<br\s*\/?>/gi, '\r\n').replace(/<[^>]+>/g, '');        
           navigator.clipboard.writeText(text).then(() => {
               const btn = document.getElementById("copy-btn");
               btn.textContent = "コピーしました！";
