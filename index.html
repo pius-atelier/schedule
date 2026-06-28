@@ -124,7 +124,7 @@
                     return response.json();
                 })
                 .then(data => {
-                    document.getElementById('test').innerText = data.items || [];
+                    document.getElementById('test').innerText = JSON.stringify(data.items, null, 2) || "予定なし";
                     abc(data.items || []);
                 })
                 .catch(err => {
