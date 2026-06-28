@@ -319,7 +319,7 @@
           document.getElementById("copy-target-box").innerHTML = resultHTML;
       }
       function copyToClipboard() {
-          const text = document.getElementById("copy-target-box").textContent.replace('<br>', '\r\n');
+          const text = document.getElementById("copy-target-box").textContent.replace('<br>', '___\r\n');
           navigator.clipboard.writeText(text).then(() => {
               const btn = document.getElementById("copy-btn");
               btn.textContent = "コピーしました！";
