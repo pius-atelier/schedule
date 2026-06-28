@@ -199,13 +199,13 @@ function abc(fetchedEvents) {
         const summary = (event.summary || "").trim();
         if (!summary || summary === "予定あり" || summary === "予約不可") return;
 
-        if (summary.includes("子供さん") || summary.includes("子連れ")) existingChild = true;
-        if (summary.includes("女性さん")) existingWoman = true;
-        if (summary.includes("男性さん")) existingMan = true;
-        if (summary.includes("子供不可")) existingNoChild = true;
-        if (summary.includes("女性不可")) existingNoWoman = true;
-        if (summary.includes("男性不可")) existingNoMan = true;
-        if (summary.includes("個別レッスン")) {
+        if (summary.includes("C") || summary.includes("B")) existingChild = true;
+        if (summary.includes("W")) existingWoman = true;
+        if (summary.includes("M")) existingMan = true;
+        if (summary.includes("c")) existingNoChild = true;
+        if (summary.includes("w")) existingNoWoman = true;
+        if (summary.includes("m")) existingNoMan = true;
+        if (summary.includes("p")) {
           existingNoChild = true;
           existingNoWoman = true;
           existingNoMan = true;
@@ -280,31 +280,31 @@ function generateCopyText() {
     }
     let calendarText = nameArray.join(",");
     const calendarProfiles = [];
-    if (document.getElementById("child")?.checked) calendarProfiles.push("子供さん");
+    if (document.getElementById("child")?.checked) calendarProfiles.push("C");
     if (document.getElementById("woman_wc")?.checked) {
-        calendarProfiles.push("女性さん");
-        calendarProfiles.push("子連れ");
+        calendarProfiles.push("W");
+        calendarProfiles.push("B");
     } else if (document.getElementById("woman")?.checked) {
-        calendarProfiles.push("女性さん");
+        calendarProfiles.push("W");
     }
     if (document.getElementById("man_wc")?.checked) {
-        calendarProfiles.push("男性さん");
-        calendarProfiles.push("子連れ");
+        calendarProfiles.push("M");
+        calendarProfiles.push("B");
     } else if (document.getElementById("man")?.checked) {
-        calendarProfiles.push("男性さん");
+        calendarProfiles.push("M");
     }
     const nc = document.getElementById("no_child")?.checked;
     const nw = document.getElementById("no_woman")?.checked;
     const nm = document.getElementById("no_man")?.checked;
     if (nc && nw && nm) {
-        calendarProfiles.push("個別レッスン");
+        calendarProfiles.push("p");
     } else {
-        if (nc) calendarProfiles.push("子供不可");
-        if (nw) calendarProfiles.push("女性不可");
-        if (nm) calendarProfiles.push("男性不可");
+        if (nc) calendarProfiles.push("c");
+        if (nw) calendarProfiles.push("w");
+        if (nm) calendarProfiles.push("m");
     }
     if (calendarProfiles.length > 0) {
-        calendarText += "_" + calendarProfiles.join("");
+        calendarText += calendarProfiles.join("");
     }
 
     const profiles = [];
