@@ -136,7 +136,7 @@
                 })
                 .then(data => {
                     fetchedEvents = data.items || [];
-                    document.getElementById('test').innerText = '属性を選択すると、予約可能な枠が表示されます。';
+                    document.getElementById('test').innerText = data;
                 })
                 .catch(err => {
                     document.getElementById('test').innerText = err.message;
