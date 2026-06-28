@@ -141,7 +141,8 @@ function abc(fetchedEvents) {
   today.setHours(0, 0, 0, 0);
 
   for (let i = 0; i < daysToCount; i++) {
-    const currentDate = new Date(today.getTime() + (i * 24 * 60 * 60 * 1000));
+    const currentDate = new Date();
+    currentDate.setDate(currentDate.getDate() + i);
     const month = currentDate.getMonth() + 1;
     const date = currentDate.getDate();
     const dayOfWeek = currentDate.getDay();
@@ -160,7 +161,7 @@ function abc(fetchedEvents) {
       dateCell.textContent = dateText + "〜";
       const statusCell = document.createElement("td");
 
-      const slotDate = new Date(currentDate.getTime()); 
+      const slotDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate());
       if (time === "10時") {
         slotDate.setHours(10, 0, 0, 0);
       } else if (time === "13時") {
