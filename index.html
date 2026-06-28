@@ -123,7 +123,6 @@
       }
     </style>
     <script>
-        // 【重要】あなたの情報に書き換えてください
         const API_KEY = 'AIzaSyCIIjhZmt3PCXe5ILuRFPrN6_iJbMxXWpg'; 
         const CALENDAR_ID = 'c666aaabda48f04b4ff767e6af9be1da56a31f715931aa39973632bba5b6a408@group.calendar.google.com'; 
         let fetchedEvents = [];
@@ -137,90 +136,13 @@
                 })
                 .then(data => {
                     fetchedEvents = data.items || [];
-                    document.getElementById('schedule-container').innerText = '属性を選択すると、予約可能な枠が表示されます。';
-                    renderSlots();
+                    document.getElementById('test').innerText = '属性を選択すると、予約可能な枠が表示されます。';
                 })
                 .catch(err => {
-                    document.getElementById('schedule-container').innerText = err.message;
+                    document.getElementById('test').innerText = err.message;
                 });
         });
-
-        function renderSlots() {
-            const selectedAttr = document.getElementById('user-attribute').value;
-            const container = document.getElementById('schedule-container');
-            container.innerHTML = '';
-
-            if (!selectedAttr) {
-                container.innerText = '※あなたの属性を選択すると、予約可能な枠が表示されます。';
-                return;
-            }
-
-            if (fetchedEvents.length === 0) {
-                container.innerText = '現在、案内可能なレッスン予定はありません。';
-                return;
-            }
-
-            fetchedEvents.forEach(event => {
-                const title = event.summary || 'レッスン';
-                const start = new Date(event.start.dateTime || event.start.date);
-                const end = new Date(event.end.dateTime || event.end.date);
-                
-                // 日時のフォーマット (例: 2026/07/01 10:00〜12:00)
-                const dateStr = start.toLocaleDateString('ja-JP');
-                const timeStr = `${start.toLocaleTimeString('ja-JP', {hour: '2-digit', minute:'2-digit'})}〜${end.toLocaleTimeString('ja-JP', {hour: '2-digit', minute:'2-digit'})}`;
-
-                // 【NG属性の判定ロジック】
-                // 講師がカレンダーのタイトルに「[NG:AM,JM]」のように書いているかチェックする
-                // 例: タイトルが「[NG:AM,JM] 洋裁基礎」で、生徒がAM(成人男性)を選んでいたらisNgはtrueになる
-                const ngMatch = title.match(/\[NG:([^\]]+)\]/);
-                let isNg = false;
-                if (ngMatch) {
-                    const ngAttributes = ngMatch[1].split(','); // ['AM', 'JM']
-                    if (ngAttributes.includes(selectedAttr)) {
-                        isNg = true;
-                    }
-                }
-
-                // タイトルから[NG:XX]の文字を消して綺麗にする
-                const cleanTitle = title.replace(/\[NG:[^\]]+\]\s*/, '');
-
-                // HTML要素の生成
-                const slotDiv = document.createElement('div');
-                slotDiv.className = 'slot';
-
-                if (isNg || title.includes('満席') || title.includes('プライベート')) {
-                    // 受付不可の枠
-                    slotDiv.classList.add('disabled');
-                    slotDiv.innerHTML = `<strong>【受付不可】 ${dateStr} ${timeStr}</strong><br>この枠はご希望の属性では予約できません。`;
-                } else {
-                    // 予約可能な枠
-                    slotDiv.innerHTML = `
-                        <strong>【予約受付中】 ${dateStr} ${timeStr}</strong><br>
-                        内容: ${cleanTitle}<br>
-                        <button onclick="generateTemplate('${dateStr}', '${timeStr}', '${cleanTitle}')">この枠でLINE連絡文を作る</button>
-                    `;
-                }
-                container.appendChild(slotDiv);
-            });
-        }
-
-        // LINE用テンプレ文章の生成
-        function generateTemplate(date, time, title) {
-            const selectEl = document.getElementById('user-attribute');
-            const attrLabel = selectEl.options[selectEl.selectedIndex].text;
-
-            let text = `【DIY教室 予約希望】\n`;
-            text += `日時：${date} ${time}\n`;
-            text += `内容：${title}\n`;
-            text += `参加者属性：${attrLabel}\n\n`;
-            text += `上記の枠での受講を希望します。よろしくお願いいたします。`;
-
-            document.getElementById('template-text').value = text;
-            document.getElementById('template-box').style.display = 'block';
-            document.getElementById('template-box').scrollIntoView({ behavior: 'smooth' });
-        }
     </script>
-
   </head>
   <body>
     <div class="container">
@@ -256,7 +178,7 @@
       </div>
       
     <h3>ご予約の際は以下をコピーしてLINEやメールからご相談ください</h3>
-    <div class="copy-instruction">
+    <div class="copy-instruction" id="test">
       <p>〇月〇日（★）★時から、〇〇の１名で、〇〇で、予約希望です。</p>
     </div>
 
