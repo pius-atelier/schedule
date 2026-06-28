@@ -221,7 +221,8 @@
             }
           
             let timeSlots = [];
-            if (dayOfWeek >= 1 && dayOfWeek <= 5) {
+            const isWeekday = dayOfWeek >= 1 && dayOfWeek <= 5;
+            if (isWeekday) {
               timeSlots = ["10時", "13時", "16時半"];
             } else if (dayOfWeek === 6) {
               timeSlots = ["10時", "13時"];
