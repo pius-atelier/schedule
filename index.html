@@ -192,7 +192,6 @@ function getCookie(name) {
     }
     return null;
 }
-
 function setCookie(name, value) {
     const maxAge = 60 * 60 * 24 * 30 * 3;
     document.cookie = `${name}=${value}; max-age=${maxAge}; path=/; SameSite=Lax`;
@@ -226,6 +225,11 @@ function setCookieEventListeners() {
             saveFormState(el);
         });
     });
+}
+function no_everybody() {
+    document.getElementById("no_child").checked = true;
+    document.getElementById("no_woman").checked = true;
+    document.getElementById("no_man").checked = true;
 }
     </script>
   </head>
@@ -272,7 +276,7 @@ function setCookieEventListeners() {
         <br>
         <input type="checkbox" id="no_man" name="no_man" /><label for="no_man"> 他の大人男性と受講しない(+1000円)</label>
         <br>
-        <button class="select-btn">個別レッスン(全選択)</button>
+        <button class="select-btn" onclick="no_everybody()">個別レッスン(全選択)</button>
       </div>
       
     <h3>ご予約の際は以下をコピーしてLINEやメールからご相談ください</h3>
