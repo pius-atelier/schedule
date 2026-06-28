@@ -387,7 +387,7 @@
               if (nm) options.push("他の大人男性不可");
           }
           const optionText = options.length > 0 ? `、${options.join("・")}で` : "";
-          const dateTimeHTML = selectedDateTime.length > 0 ? selectedDateTime.join("<br>") : "〇月〇日(★) ★時";
+          const dateTimeHTML = selectedDateTime.length > 0 ? selectedDateTime.join("<br>") : "★★日程が未選択です★★";
           const resultHTML = `${dateTimeHTML}<br>${profileText}が${numText}で${optionText}予約希望です。<br>[${calendarText}]`;
           document.getElementById("copy-target-box").innerHTML = resultHTML;
       }
@@ -449,7 +449,7 @@
                   saveFormState(el);
                   if (selectedDateTime.length > 0) {
                       selectedDateTime = [];
-                      alert("情報を変更したため日程を削除しました");
+                      alert("情報を変更したため日程選択をクリアしました");
                   }
                   update();
                   generateCopyText();
@@ -465,7 +465,7 @@
           saveFormState(document.getElementById("no_man"));
           if (selectedDateTime.length > 0) {
               selectedDateTime = [];
-              alert("情報を変更したため日程を削除しました");
+              alert("情報を変更したため日程選択をクリアしました");
           }
           update();
           generateCopyText();
@@ -524,7 +524,7 @@
     <div class="form-section">
       <div id="copy-target-box">処理中...</div>
       <button class="select-btn" id="copy-btn" onclick="copyToClipboard()">クリップボードにコピー</button>
-      <button class="select-btn" onclick="clearSelectedDateTime()">選択した日時をクリア</button>
+      <button class="select-btn" onclick="clearSelectedDateTime()">日程選択をクリア</button>
     </div>
 
     <h3>以下の中から日程を選択してください</h3>
