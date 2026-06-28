@@ -171,8 +171,11 @@ function abc(fetchedEvents) {
       }
       const matchedEvents = fetchedEvents.filter(event => {
         if (!event.start || !event.start.dateTime || !event.end || !event.end.dateTime) return false;
-        const eventStart = new Date(event.start.dateTime);
-        const eventEnd = new Date(event.end.dateTime);
+
+        const eventStartRaw = new Date(event.start.dateTime);
+        const eventEndRaw = new Date(event.end.dateTime);
+        const eventStart = new Date(eventStartRaw.getTime() + eventStartRaw.getTimezoneOffset() * 60000);
+        const eventEnd = new Date(eventEndRaw.getTime() + eventEndRaw.getTimezoneOffset() * 60000);
         return slotDate >= eventStart && slotDate < eventEnd;
       });
 
