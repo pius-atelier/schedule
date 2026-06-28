@@ -230,8 +230,8 @@
             timeSlots.forEach(time => {
               const row = document.createElement("tr");
               const dateCell = document.createElement("td");
-              const dateText = `${month}月${date}日(${dayName}) ${time}`;
-              dateCell.textContent = dateText + "〜";
+              const dateText = `${month}月${date}日(${dayName}) ${time}～`;
+              dateCell.textContent = dateText;
               const statusCell = document.createElement("td");
         
               const slotDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate());
