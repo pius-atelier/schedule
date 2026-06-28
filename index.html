@@ -281,22 +281,22 @@ function generateCopyText() {
     }
     let calendarText = nameArray.join(",");
     const calendarProfiles = [];
-    if (document.getElementById("child")?.checked) calendarProfiles.push("子供さん");
-    if (document.getElementById("woman_wc")?.checked) {
+    if (document.getElementById("child").checked) calendarProfiles.push("子供さん");
+    if (document.getElementById("woman_wc").checked) {
         calendarProfiles.push("女性さん");
         calendarProfiles.push("子連れ");
-    } else if (document.getElementById("woman")?.checked) {
+    } else if (document.getElementById("woman").checked) {
         calendarProfiles.push("女性さん");
     }
-    if (document.getElementById("man_wc")?.checked) {
+    if (document.getElementById("man_wc").checked) {
         calendarProfiles.push("男性さん");
         calendarProfiles.push("子連れ");
-    } else if (document.getElementById("man")?.checked) {
+    } else if (document.getElementById("man").checked) {
         calendarProfiles.push("男性さん");
     }
-    const nc = document.getElementById("no_child")?.checked;
-    const nw = document.getElementById("no_woman")?.checked;
-    const nm = document.getElementById("no_man")?.checked;
+    const nc = document.getElementById("no_child").checked;
+    const nw = document.getElementById("no_woman").checked;
+    const nm = document.getElementById("no_man").checked;
     if (nc && nw && nm) {
         calendarProfiles.push("個別レッスン");
     } else {
@@ -309,16 +309,16 @@ function generateCopyText() {
     }
 
     const profiles = [];
-    if (document.getElementById("child")?.checked) profiles.push("子供");
-    if (document.getElementById("woman")?.checked) profiles.push("大人女性");
-    if (document.getElementById("woman_wc")?.checked) profiles.push("大人女性(子連れ)");
-    if (document.getElementById("man")?.checked) profiles.push("大人男性");
-    if (document.getElementById("man_wc")?.checked) profiles.push("大人男性(子連れ)");
+    if (document.getElementById("child").checked) profiles.push("子供");
+    if (document.getElementById("woman").checked) profiles.push("大人女性");
+    if (document.getElementById("woman_wc").checked) profiles.push("大人女性(子連れ)");
+    if (document.getElementById("man").checked) profiles.push("大人男性");
+    if (document.getElementById("man_wc").checked) profiles.push("大人男性(子連れ)");
     const profileText = profiles.length > 0 ? profiles.join("・") : "〇〇";
     const options = [];
-    const nc = document.getElementById("no_child")?.checked;
-    const nw = document.getElementById("no_woman")?.checked;
-    const nm = document.getElementById("no_man")?.checked;
+    const nc = document.getElementById("no_child").checked;
+    const nw = document.getElementById("no_woman").checked;
+    const nm = document.getElementById("no_man").checked;
     if (nc && nw && nm) {
         options.push("個別レッスン");
     } else {
