@@ -136,7 +136,8 @@
                 })
                 .then(data => {
                     fetchedEvents = data.items || [];
-                    document.getElementById('test').innerText = JSON.stringify(data, null, 2);
+
+                    document.getElementById('test').innerText = JSON.stringify(fetchedEvents, null, 2);
                 })
                 .catch(err => {
                     document.getElementById('test').innerText = err.message;
