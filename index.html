@@ -140,6 +140,14 @@ function abc(fetchedEvents) {
   const daysToCount = 60;
   const today = new Date();
   today.setHours(0, 0, 0, 0);
+  const myNum = parseInt(document.getElementById("num")?.value || "1", 10);
+  const myChild = document.getElementById("child")?.checked;
+  const myWoman = document.getElementById("woman")?.checked || document.getElementById("woman_wc")?.checked;
+  const myMan = document.getElementById("man")?.checked || document.getElementById("man_wc")?.checked;
+  const myNoChild = document.getElementById("no_child")?.checked;
+  const myNoWoman = document.getElementById("no_woman")?.checked;
+  const myNoMan = document.getElementById("no_man")?.checked;
+
 
   for (let i = 0; i < daysToCount; i++) {
     const currentDate = new Date();
@@ -178,11 +186,52 @@ function abc(fetchedEvents) {
         return slotDate >= eventStart && slotDate < eventEnd;
       });
 
-      const isSewingDisabled = matchedEvents.some(event => (event.summary || "").trim() === "予約不可");
+      let isDisabled = matchedEvents.some(event => (event.summary || "").trim() === "予約不可");
+      
+      let totalPeople = 0;
+      let existingChild = false;
+      let existingWoman = false;
+      let existingMan = false;
+      let existingNoChild = false;
+      let existingNoWoman = false;
+      let existingNoMan = false;
+
+      matchedEvents.forEach(event => {
+        const summary = (event.summary || "").trim();
+        if (!summary || summary === "予定あり" || summary === "予約不可") return;
+
+        if (summary.includes("子供さん")) existingChild = true;
+        if (summary.includes("女性さん")) existingWoman = true;
+        if (summary.includes("男性さん")) existingMan = true;
+        if (summary.includes("他の子供不可") || summary.includes("子供不可")) existingNoChild = true;
+        if (summary.includes("他の女性不可") || summary.includes("女性不可")) existingNoWoman = true;
+        if (summary.includes("他の男性不可") || summary.includes("男性不可")) existingNoMan = true;
+        if (summary.includes("個別レッスン")) {
+          existingNoChild = true;
+          existingNoWoman = true;
+          existingNoMan = true;
+        }
+
+        const names = summary.split(/[，,]/);
+        let eventCount = names.length;
+        totalPeople += eventCount;
+      });
+
+      if (!isDisabled && matchedEvents.length > 0) {
+        if (existingNoChild && myChild) isDisabled = true;
+        if (existingNoWoman && myWoman) isDisabled = true;
+        if (existingNoMan && myMan) isDisabled = true;
+
+        if (myNoChild && existingChild) isDisabled = true;
+        if (myNoWoman && existingWoman) isDisabled = true;
+        if (myNoMan && existingMan) isDisabled = true;
+        if ((totalPeople + myNum) > 5) isDisabled = true;
+      }
+
 
       const btn = document.createElement("button");
       btn.className = "select-btn";
-      if (isSewingDisabled) {
+      if (isDisabled) {
         btn.textContent = "不可";
         btn.disabled = true;
       } else {
