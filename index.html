@@ -250,7 +250,7 @@
                 return slotDate >= eventStart && slotDate < eventEnd;
               });
         
-              let isDisabled = matchedEvents.some(event => (event.summary || "").trim() === "予約不可");
+              let isDisabled = matchedEvents.some(event => (event.summary || "").trim() === "不可");
               
               let totalPeople = 0;
               let existingChild = false;
