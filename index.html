@@ -339,6 +339,11 @@
               }, 3000);
           });
       }
+      function clearSelectedDateTime() {
+          selectedDateTime = [];
+          update();
+          generateCopyText();
+      }
       function getCookie(name) {
           const cookies = document.cookie.split(';');
           for (let i = 0; i < cookies.length; i++) {
@@ -449,6 +454,7 @@
     <div class="form-section">
       <div id="copy-target-box">処理中...</div>
       <button class="select-btn" id="copy-btn" onclick="copyToClipboard()">クリップボードにコピー</button>
+      <button class="select-btn" onclick="clearSelectedDateTime()">選択した日時をクリア</button>
     </div>
 
     <h3>以下の中から日程を選択してください</h3>
