@@ -315,11 +315,8 @@
               if (nm) options.push("他の大人男性不可");
           }
           const optionText = options.length > 0 ? `、${options.join("・")}で` : "";
-          const resultText = `${selectedDateTime}<br>${profileText}が${numText}で${optionText}予約希望です。[${calendarText}]`;
-          const targetBox = document.getElementById("copy-target-box");
-          if (targetBox) {
-              targetBox.textContent = resultText;
-          }
+          const resultHTML = `${selectedDateTime}<br>${profileText}が${numText}で${optionText}予約希望です。[${calendarText}]`;
+          document.getElementById("copy-target-box").innerHTML = resultHTML;
       }
       function copyToClipboard() {
           const text = document.getElementById("copy-target-box").textContent;
