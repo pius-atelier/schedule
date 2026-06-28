@@ -126,7 +126,10 @@
         const API_KEY = 'AIzaSyCIIjhZmt3PCXe5ILuRFPrN6_iJbMxXWpg'; 
         const CALENDAR_ID = 'c666aaabda48f04b4ff767e6af9be1da56a31f715931aa39973632bba5b6a408@group.calendar.google.com'; 
         let fetchedEvents = [];
+        const targetIds = ['num', 'child', 'woman', 'man', 'w_child', 'no_child', 'no_woman', 'no_man'];
         window.addEventListener('DOMContentLoaded', () => {
+            loadFormState();
+            setCookieEventListeners();
             const now = new Date().toISOString();
             const url = `https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(CALENDAR_ID)}/events?key=${API_KEY}&timeMin=${now}&orderBy=startTime&singleEvents=true`;
             fetch(url)
@@ -178,6 +181,51 @@ function abc() {
       tableBody.appendChild(row);
     });
   }
+}
+function getCookie(name) {
+    const cookies = document.cookie.split(';');
+    for (let i = 0; i < cookies.length; i++) {
+        const cookie = cookies[i].trim();
+        if (cookie.startsWith(name + '=')) {
+            return cookie.substring(name.length + 1);
+        }
+    }
+    return null;
+}
+
+function setCookie(name, value) {
+    const maxAge = 60 * 60 * 24 * 30 * 3;
+    document.cookie = `${name}=${value}; max-age=${maxAge}; path=/; SameSite=Lax`;
+}
+function saveFormState(el) {
+    if (el.type === 'checkbox') {
+        setCookie(el.id, el.checked ? 'true' : 'false');
+    } else if (el.tagName === 'SELECT') {
+        setCookie(el.id, el.value);
+    }
+}
+function loadFormState() {
+    targetIds.forEach(id => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        const savedValue = getCookie(id);
+        if (savedValue !== null) {
+            if (el.type === 'checkbox') {
+                el.checked = (savedValue === 'true');
+            } else if (el.tagName === 'SELECT') {
+                el.value = savedValue;
+            }
+        }
+    });
+}
+function setCookieEventListeners() {
+    targetIds.forEach(id => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        el.addEventListener('change', () => {
+            saveFormState(el);
+        });
+    });
 }
     </script>
   </head>
