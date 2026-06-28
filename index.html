@@ -183,7 +183,7 @@ function abc() {
       btn.addEventListener("click", () => {
           selectedDateTime = dateText;
           generateCopyText();
-           document.getElementById("copy-target-box").scrollIntoView({ behavior: 'smooth' });
+           document.getElementById("copy-instruction").scrollIntoView({ behavior: 'smooth' });
       });
       statusCell.appendChild(btn);
 
@@ -215,7 +215,7 @@ function generateCopyText() {
         if (nm) options.push("他の大人男性不可");
     }
     const optionText = options.length > 0 ? `（希望: ${options.join("・")}）` : "";
-    const resultText = `${selectedDateTime}から、${profileText}の${numText}で、${optionText || "追加希望なし"}で、予約希望です。`;
+    const resultText = `${selectedDateTime}から、${profileText}の${numText}で、${optionText || "追加希望なし"}で予約希望です。`;
     const targetBox = document.getElementById("copy-target-box");
     if (targetBox) {
         targetBox.textContent = resultText;
