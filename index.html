@@ -284,6 +284,7 @@
                 if (myNoMan && existingMan) isDisabled = true;
                 if ((totalPeople + myNum) > 5) isDisabled = true;
               }
+              if (isWeekday && time === "16時半" && (myWoman || myMan)) isDisabled = true;
         
               const btn = document.createElement("button");
               btn.className = "select-btn";
