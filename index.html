@@ -159,15 +159,36 @@ function abc(fetchedEvents) {
       dateCell.textContent = dateText + "〜";
       const statusCell = document.createElement("td");
 
-      // またはdisabledを付けて不可と書く
+
+      const matchedEvents = fetchedEvents.filter(event => {
+        if (!event.start || !event.start.dateTime) return false;
+        const eventDate = new Date(event.start.dateTime);
+        const mMatch = (eventDate.getMonth() + 1) === month;
+        const dMatch = eventDate.getDate() === date;
+        let tMatch = false;
+        const hour = eventDate.getHours();
+        const min = eventDate.getMinutes();
+        if (time === "10時" && hour === 10) tMatch = true;
+        if (time === "13時" && hour === 13) tMatch = true;
+        if (time === "16時半" && hour === 16 && min === 30) tMatch = true;
+        
+        return mMatch && dMatch && tMatch;
+      });
+      const isSewingDisabled = matchedEvents.some(event => (event.summary || "").trim() === "ミシン（不可）");
+
       const btn = document.createElement("button");
       btn.className = "select-btn";
-      btn.textContent = "ご相談可能";
-      btn.addEventListener("click", () => {
-          selectedDateTime = dateText;
-          generateCopyText();
-           document.getElementById("copy-base").scrollIntoView({ behavior: 'smooth' });
-      });
+      if (isSewingDisabled) {
+        btn.textContent = "不可";
+        btn.disabled = true;
+      } else {
+        btn.textContent = "ご相談可能";
+        btn.addEventListener("click", () => {
+            selectedDateTime = dateText;
+            generateCopyText();
+             document.getElementById("copy-base").scrollIntoView({ behavior: 'smooth' });
+        });
+      }
       statusCell.appendChild(btn);
 
       row.appendChild(dateCell);
