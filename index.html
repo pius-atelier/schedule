@@ -136,7 +136,7 @@
                 })
                 .then(data => {
                     fetchedEvents = data.items || [];
-                    document.getElementById('test').innerText = data.json;
+                    document.getElementById('test').innerText = data.json();
                 })
                 .catch(err => {
                     document.getElementById('test').innerText = err.message;
