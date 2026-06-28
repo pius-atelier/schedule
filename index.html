@@ -117,7 +117,7 @@
             setCookieEventListeners();
             generateCopyText();
             const now = new Date().toISOString();
-            const url = `https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(CALENDAR_ID)}/events?key=${API_KEY}&timeMin=${now}&orderBy=startTime&singleEvents=true`;
+            const url = `https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(CALENDAR_ID)}/events?key=${API_KEY}&timeMin=${now}&orderBy=startTime&singleEvents=true&maxResults=2500`;
             fetch(url)
                 .then(response => {
                     if (!response.ok) throw new Error('カレンダーデータの取得に失敗しました。設定を確認してください。');
