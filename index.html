@@ -138,9 +138,10 @@ function abc(fetchedEvents) {
   const dayLabels = ["日", "月", "火", "水", "木", "金", "土"];
   const daysToCount = 60;
   const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
   for (let i = 0; i < daysToCount; i++) {
-    const currentDate = new Date(today);
-    currentDate.setDate(today.getDate() + i);
+    const currentDate = new Date(today.getTime() + (i * 24 * 60 * 60 * 1000));
     const month = currentDate.getMonth() + 1;
     const date = currentDate.getDate();
     const dayOfWeek = currentDate.getDay();
@@ -159,20 +160,21 @@ function abc(fetchedEvents) {
       dateCell.textContent = dateText + "〜";
       const statusCell = document.createElement("td");
 
+      const slotDate = new Date(currentDate.getTime()); 
+      if (time === "10時") {
+        slotDate.setHours(10, 0, 0, 0);
+      } else if (time === "13時") {
+        slotDate.setHours(13, 0, 0, 0);
+      } else if (time === "16時半") {
+        slotDate.setHours(16, 30, 0, 0);
+      }
       const matchedEvents = fetchedEvents.filter(event => {
         if (!event.start || !event.start.dateTime || !event.end || !event.end.dateTime) return false;
         const eventStart = new Date(event.start.dateTime);
         const eventEnd = new Date(event.end.dateTime);
-        const slotDate = new Date(currentDate);
-        if (time === "10時") {
-          slotDate.setHours(10, 0, 0, 0);
-        } else if (time === "13時") {
-          slotDate.setHours(13, 0, 0, 0);
-        } else if (time === "16時半") {
-          slotDate.setHours(16, 30, 0, 0);
-        }
         return slotDate >= eventStart && slotDate < eventEnd;
       });
+
       const isSewingDisabled = matchedEvents.some(event => (event.summary || "").trim() === "ミシン（不可）");
 
       const btn = document.createElement("button");
@@ -189,28 +191,11 @@ function abc(fetchedEvents) {
         });
       }
       statusCell.appendChild(btn);
-
       row.appendChild(dateCell);
       row.appendChild(statusCell);
 
       if (isViewMode) {
         const infoCell = document.createElement("td");
-        const currentYear = currentDate.getFullYear();
-        const matchedEvents = fetchedEvents.filter(event => {
-          if (!event.start || !event.start.dateTime || !event.end || !event.end.dateTime) return false;
-          const eventStart = new Date(event.start.dateTime);
-          const eventEnd = new Date(event.end.dateTime);
-          const slotDate = new Date(currentDate);
-          if (time === "10時") {
-            slotDate.setHours(10, 0, 0, 0);
-          } else if (time === "13時") {
-            slotDate.setHours(13, 0, 0, 0);
-          } else if (time === "16時半") {
-            slotDate.setHours(16, 30, 0, 0);
-          }
-          return slotDate >= eventStart && slotDate < eventEnd;
-        });
-
         if (matchedEvents.length > 0) {
           infoCell.textContent = matchedEvents.map(e => e.summary || "予定あり").join(", ");
         } else {
